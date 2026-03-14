@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <title>url shortener</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>url shortener // sys.01</h1>
+        </header>
+
+        <section class="form-section">
+            <form id="link-shortener" action="/" method="post">
+                <div class="input-row">
+                    <input
+                        placeholder="enter target url..."
+                        type="text"
+                        name="url"
+                        required
+                        autocomplete="off"
+                    />
+                    <button type="submit">shorten</button>
+                </div>
+                {{ if ne .Error "" }}
+                <div class="error-box">
+                    err: {{ .Error }}
+                </div>
+                {{ end }}
+            </form>
+        </section>
+
+        <section class="table-section">
+            <table id="shortened-links-table">
+                <thead>
+                    <tr>
+                        <th>short url</th>
+                        <th>destination</th>
+                        <th class="text-right">clicks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ if len .URLData | eq 0 }}
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            [ database empty ]
+                        </td>
+                    </tr>
+                    {{ end }}
+                    {{ range .URLData }}
+                    <tr>
+                        <td>
+                            <a href="{{$.BaseURL}}o/{{ .ShortenedURL }}" target="_blank">
+                                {{$.BaseURL}}o/{{ .ShortenedURL }}
+                            </a>
+                        </td>
+                        <td title="{{ .OriginalURL }}">
+                            {{ .OriginalURL }}
+                        </td>
+                        <td class="text-right">{{ .Clicks | formatClicks }}</td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right">
+                            records: {{ .URLData | len }}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <span>go_runtime v1.0</span>
+        <span>status: active</span>
+    </footer>
+</body>
+</html>

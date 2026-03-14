@@ -1,0 +1,30 @@
+cat > .gitignore << 'EOF'
+# Environment
+.env
+
+# Database
+*.sqlite3
+*.db
+data/database.sqlite3
+
+# Go build output
+main
+*.exe
+
+# Go test cache
+*.test
+*.out
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Air (live reload tool, if you ever use it)
+tmp/
+EOF
