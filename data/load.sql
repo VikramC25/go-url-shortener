@@ -11,5 +11,5 @@ CREATE index idx_shortened ON urls (shortened_url);
 
 INSERT INTO urls (original_url, shortened_url, clicks) 
 VALUES
-("https://osnews.com", "shoRtkl9187ds", 347),
-("https://stackoverflow.com/questions/tagged/go", "sh0Rtkl9187es", 2809);
+('https://osnews.com', 'shoRtkl9187ds', 347),
+('https://stackoverflow.com/questions/tagged/go', 'sh0Rtkl9187es', 2809);

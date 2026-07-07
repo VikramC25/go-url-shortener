@@ -93,6 +93,22 @@ func newApp() App {
 	if err = db.Ping(); err != nil {
 		log.Fatal(err)
 	}
+	schema := `
+		CREATE TABLE IF NOT EXISTS urls (
+			original_url TEXT PRIMARY KEY,
+			shortened_url TEXT UNIQUE NOT NULL,
+			clicks INTEGER NOT NULL DEFAULT 0,
+			created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+		);
+
+		CREATE INDEX IF NOT EXISTS idx_shortened
+		ON urls(shortened_url);
+		`
+
+	if _, err := db.Exec(schema); err != nil {
+		log.Fatal(err)
+	}
 
 	return App{urls: &models.ShortenerDataModel{DB: db}}
 }
@@ -116,7 +132,7 @@ func (a *App) getDefaultRoute(w http.ResponseWriter, r *http.Request) {
 	}
 	urls, err := a.urls.Latest()
 	if err != nil {
-		fmt.Printf("Could not retrieve all URLs, because %s.\n", err)
+		serverError(w, err)
 		return
 	}
 	baseURL := "http://" + r.Host + "/"
